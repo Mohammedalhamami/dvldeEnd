@@ -109,10 +109,19 @@ namespace DVLD.Controls
         private void llEditPersonInfo_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             frmAddUpdatePerson frm = new frmAddUpdatePerson(_PersonID);
+            //We make subscription to caller form delegate event.
+            frm.DataBack += LoadPersonInfo;
             frm.ShowDialog();
 
-            //refresh
-            LoadPersonInfo(_PersonID);
+
+        }
+        /*This function will receive delegate event's(DataBack) parameters from frmAddUpdate 
+         * and then it will Load Data by PersonID from AddUpdate form.
+         */
+        private void LoadPersonInfo(object sender, int PersonID)
+        {
+            _Person = clsPerson.Find(PersonID);
+            _FillPersonInfo();
         }
 
 
