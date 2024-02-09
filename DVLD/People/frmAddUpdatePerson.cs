@@ -358,6 +358,12 @@ namespace DVLD
             llRemoveImage.Visible = false;
 
         }
+
+        private void btnClose_Click(object sender, EventArgs e)
+        {
+            DataBack?.Invoke(this, _PersonID);
+            this.Close();
+        }
     };
 }
 

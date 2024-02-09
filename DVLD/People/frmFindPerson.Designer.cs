@@ -48,9 +48,10 @@
             // btnPersonDetailsClose
             // 
             this.btnPersonDetailsClose.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnPersonDetailsClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnPersonDetailsClose.Image = ((System.Drawing.Image)(resources.GetObject("btnPersonDetailsClose.Image")));
             this.btnPersonDetailsClose.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnPersonDetailsClose.Location = new System.Drawing.Point(661, 407);
+            this.btnPersonDetailsClose.Location = new System.Drawing.Point(682, 407);
             this.btnPersonDetailsClose.Name = "btnPersonDetailsClose";
             this.btnPersonDetailsClose.Size = new System.Drawing.Size(95, 32);
             this.btnPersonDetailsClose.TabIndex = 25;
@@ -65,7 +66,7 @@
             this.ctlPersonCardWithFilter1.BackColor = System.Drawing.Color.White;
             this.ctlPersonCardWithFilter1.FilterEnabled = true;
             this.ctlPersonCardWithFilter1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ctlPersonCardWithFilter1.Location = new System.Drawing.Point(-5, 62);
+            this.ctlPersonCardWithFilter1.Location = new System.Drawing.Point(13, 62);
             this.ctlPersonCardWithFilter1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.ctlPersonCardWithFilter1.Name = "ctlPersonCardWithFilter1";
             this.ctlPersonCardWithFilter1.ShowAddPerson = true;

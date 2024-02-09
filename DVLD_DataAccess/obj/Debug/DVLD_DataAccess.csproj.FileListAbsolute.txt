@@ -4,3 +4,9 @@ C:\Users\Windows10\source\repos\DVLDmine\DVLD_DataAccess\obj\Debug\DVLD_DataAcce
 C:\Users\Windows10\source\repos\DVLDmine\DVLD_DataAccess\obj\Debug\DVLD_DataAccess.csproj.CoreCompileInputs.cache
 C:\Users\Windows10\source\repos\DVLDmine\DVLD_DataAccess\obj\Debug\DVLD_DataAccess.dll
 C:\Users\Windows10\source\repos\DVLDmine\DVLD_DataAccess\obj\Debug\DVLD_DataAccess.pdb
+C:\Users\Windows10\source\repos\dvldEnd\DVLD_DataAccess\bin\Debug\DVLD_DataAccess.dll
+C:\Users\Windows10\source\repos\dvldEnd\DVLD_DataAccess\bin\Debug\DVLD_DataAccess.pdb
+C:\Users\Windows10\source\repos\dvldEnd\DVLD_DataAccess\obj\Debug\DVLD_DataAccess.csproj.AssemblyReference.cache
+C:\Users\Windows10\source\repos\dvldEnd\DVLD_DataAccess\obj\Debug\DVLD_DataAccess.csproj.CoreCompileInputs.cache
+C:\Users\Windows10\source\repos\dvldEnd\DVLD_DataAccess\obj\Debug\DVLD_DataAccess.dll
+C:\Users\Windows10\source\repos\dvldEnd\DVLD_DataAccess\obj\Debug\DVLD_DataAccess.pdb
