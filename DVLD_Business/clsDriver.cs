@@ -6,8 +6,8 @@ namespace DVLD_Business
 {
     public class clsDriver
     {
-        public enum en_Mode { AddNew = 1, Update = 2 };
-        private en_Mode _Mode = en_Mode.AddNew;
+        public enum enMode { AddNew = 1, Update = 2 };
+        private enMode Mode = enMode.AddNew;
 
         public clsPerson PersonInfo;
         public int DriverID { get; set; }
@@ -21,7 +21,7 @@ namespace DVLD_Business
             this.PersonID = -1;
             this.CreatedByUserID = -1;
             this.CreatedDate = DateTime.Now;
-            this._Mode = en_Mode.AddNew;
+            this.Mode = enMode.AddNew;
         }
 
         public clsDriver(int DriverID, int PersonID, int CreatedByUserID, DateTime CreatedDate)
@@ -31,7 +31,7 @@ namespace DVLD_Business
             this.PersonInfo = clsPerson.Find(PersonID);
             this.CreatedByUserID = CreatedByUserID;
             this.CreatedDate = CreatedDate;
-            this._Mode = en_Mode.Update;
+            this.Mode = enMode.Update;
         }
 
         private bool _AddNewDriver()
@@ -47,17 +47,17 @@ namespace DVLD_Business
 
         public bool Save()
         {
-            switch (this._Mode)
+            switch (this.Mode)
             {
-                case en_Mode.AddNew:
+                case enMode.AddNew:
                     if (_AddNewDriver())
                     {
-                        this._Mode = en_Mode.Update;
+                        this.Mode = enMode.Update;
                         return true;
                     }
                     else
                         return false;
-                case en_Mode.Update:
+                case enMode.Update:
                     return (_UpdateDriver());
             }
             return false;
