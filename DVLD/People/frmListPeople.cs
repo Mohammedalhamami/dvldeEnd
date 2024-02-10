@@ -75,9 +75,20 @@ namespace DVLD
         {
             frmAddUpdatePerson AEPerson = new frmAddUpdatePerson();
 
-            AEPerson.ShowDialog();
+            AEPerson.DataBack += PlayVideo;
             //Refresh People List after adding new person.
+            AEPerson.ShowDialog();
             _RefreshPeoplList();
+        }
+        private void PlayVideo(object sender, int PersonID)
+        {
+
+            if (PersonID != -1)
+            {
+
+                frmPlayVideo frm = new frmPlayVideo();
+                frm.ShowDialog();
+            }
         }
         private void btnCloseManagePeople_Click(object sender, System.EventArgs e)
         {
@@ -92,7 +103,8 @@ namespace DVLD
         private void addNewPersonToolStripMenuItem_Click(object sender, System.EventArgs e)
         {
             frmAddUpdatePerson AEPerson = new frmAddUpdatePerson();
-
+            //to subscripe to delegate, we have to put subscription before showDialog func.
+            AEPerson.DataBack += PlayVideo;
             AEPerson.ShowDialog();
             _RefreshPeoplList();
         }
