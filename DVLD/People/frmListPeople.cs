@@ -76,7 +76,8 @@ namespace DVLD
             frmAddUpdatePerson AEPerson = new frmAddUpdatePerson();
 
             AEPerson.ShowDialog();
-
+            //Refresh People List after adding new person.
+            _RefreshPeoplList();
         }
         private void btnCloseManagePeople_Click(object sender, System.EventArgs e)
         {
