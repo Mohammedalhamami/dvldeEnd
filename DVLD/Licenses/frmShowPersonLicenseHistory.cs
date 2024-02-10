@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DVLD_Business;
+using System;
 using System.Windows.Forms;
 
 namespace DVLD
@@ -7,6 +8,7 @@ namespace DVLD
     {
 
         private int _PersonID = -1;
+        private clsPerson _Person;
         public frmShowPersonLicenseHistory()
         {
             InitializeComponent();
@@ -50,16 +52,19 @@ namespace DVLD
             this.Close();
         }
 
-        private void ctlPersonCardWithFilter1_OnPersonSelected(int obj)
-        {
-            _PersonID = obj;
 
-            if (_PersonID == -1)
+
+        private void ctlPersonCardWithFilter1_OnPersonSelected(object sender, Controls.ctlPersonCardWithFilter.SelectedPersonArgs e)
+        {
+            _Person = e.Person;
+            if (_Person == null)
             {
                 ctlDriverLicenses1.Clear();
             }
             else
-                ctlDriverLicenses1.LoadInfoByPerson(_PersonID);
+            {
+                ctlDriverLicenses1.LoadInfoByPerson(_Person.PersonID);
+            }
         }
     }
 }

@@ -129,7 +129,7 @@
             this.ctlPersonCardWithFilter1.ShowAddPerson = true;
             this.ctlPersonCardWithFilter1.Size = new System.Drawing.Size(764, 355);
             this.ctlPersonCardWithFilter1.TabIndex = 8;
-            this.ctlPersonCardWithFilter1.OnPersonSelected += new System.Action<int>(this.ctlPersonCardWithFilter1_OnPersonSelected);
+            this.ctlPersonCardWithFilter1.OnPersonSelected += new System.EventHandler<DVLD.Controls.ctlPersonCardWithFilter.SelectedPersonArgs>(this.ctlPersonCardWithFilter1_OnPersonSelected);
             // 
             // tpApplicationInfo
             // 

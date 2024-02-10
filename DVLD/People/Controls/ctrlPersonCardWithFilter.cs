@@ -9,9 +9,9 @@ namespace DVLD.Controls
     {
 
         // Define a custom event handler delegate with parameters
-        public event Action<int> OnPersonSelected;
+        // public event Action<int> OnPersonSelected;
         // Create a protected method to raise the event with a parameter
-        protected virtual void PersonSelected(int PersonID)
+        /*protected virtual void PersonSelected(int PersonID)
         {
             Action<int> handler = OnPersonSelected;
             if (handler != null)
@@ -19,6 +19,29 @@ namespace DVLD.Controls
                 handler(PersonID); // Raise the event with the parameter
             }
         }
+        */
+        //steps to create standerd event
+        //1- define EventArgs.
+        public class SelectedPersonArgs : EventArgs
+        {
+            public clsPerson Person { get; }
+            public SelectedPersonArgs(clsPerson Person)
+            {
+                this.Person = Person;
+            }
+
+
+        }
+
+        //2- define event handler
+        public event EventHandler<SelectedPersonArgs> OnPersonSelected;
+
+        //3- define method to raise event with parameter
+        protected virtual void RaiseOnePersonSelected(SelectedPersonArgs e)
+        {
+            OnPersonSelected?.Invoke(this, e);
+        }
+
 
 
         private bool _ShowAddPerson = true;
@@ -92,11 +115,13 @@ namespace DVLD.Controls
 
                 default:
                     break;
-            }
 
+            }
+            //to check the event is handled
             if (OnPersonSelected != null && FilterEnabled)
             {
-                OnPersonSelected(ctlPersonCard1.PersonID);
+                //i sent whole person object as parameter with the event.
+                RaiseOnePersonSelected(new SelectedPersonArgs(ctlPersonCard1.SelectedPersonInfo));
             }
             // Raise the event with a parameter
         }
@@ -166,6 +191,7 @@ namespace DVLD.Controls
 
         private void txtFilterValue_KeyPress(object sender, KeyPressEventArgs e)
         {
+
             // Check if the pressed key is Enter (character code 13)
             if (e.KeyChar == (char)13)
             {

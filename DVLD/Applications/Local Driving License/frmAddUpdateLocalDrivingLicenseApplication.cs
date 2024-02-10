@@ -12,6 +12,7 @@ namespace DVLD
         private enMode _Mode;
         private int _LocalDrivingLicenseApplicationID = -1;
         private int _SelectedPersonID = -1;
+        private clsPerson _SelectedPerson;
         private clsLocalDrivingLicenseApplication _LocalDrivingLicenseApplication;
         public frmAddUpdateLocalDrivingLicenseApplication()
         {
@@ -80,11 +81,7 @@ namespace DVLD
             lblFees.Text = _LocalDrivingLicenseApplication.PaidFees.ToString();
             lblCreatedByUser.Text = clsUser.FindByUserID(_LocalDrivingLicenseApplication.CreatedByUserID).UserName.ToString();
         }
-        private void DataBackEvent(object sender, int PersonID)
-        {
-            _SelectedPersonID = PersonID;
-            ctlPersonCardWithFilter1.LoadPersonInfo(PersonID);
-        }
+
         private void frmAddUpdateLocalDrivingLicenseApplication_Load(object sender, EventArgs e)
         {
             _ResetDefualtValues();
@@ -122,7 +119,7 @@ namespace DVLD
 
             int LicenseClassID = clsLicenseClass.Find(cbLicenseClasses.Text).LicenseClassID;
 
-            int ActiveApplicationID = clsApplication.GetActiveApplicationIDForLicenseClass(_SelectedPersonID, clsApplication.enApplicationType.NewDrivingLicense, LicenseClassID);
+            int ActiveApplicationID = clsApplication.GetActiveApplicationIDForLicenseClass(_SelectedPerson.PersonID, clsApplication.enApplicationType.NewDrivingLicense, LicenseClassID);
 
             if (ActiveApplicationID != -1)
             {
@@ -162,10 +159,7 @@ namespace DVLD
                 MessageBox.Show("Error: Data Is not Saved Successfully.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
         }
-        private void ctlPersonCardWithFilter1_OnPersonSelected(int obj)
-        {
-            _SelectedPersonID = obj;
-        }
+
 
 
         private void btnAddEditPersonClose_Click(object sender, EventArgs e)
@@ -178,5 +172,10 @@ namespace DVLD
             ctlPersonCardWithFilter1.FilterFocus();
         }
 
+        private void ctlPersonCardWithFilter1_OnPersonSelected(object sender, Controls.ctlPersonCardWithFilter.SelectedPersonArgs e)
+        {
+            _SelectedPerson = e.Person;
+            ctlPersonCardWithFilter1.LoadPersonInfo(_SelectedPerson.PersonID);
+        }
     }
 }
