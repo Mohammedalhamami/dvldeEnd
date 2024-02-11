@@ -54,9 +54,9 @@ namespace DVLD
 
 
 
-        private void ctlPersonCardWithFilter1_OnPersonSelected(object sender, Controls.ctlPersonCardWithFilter.SelectedPersonArgs e)
+        private void ctlPersonCardWithFilter1_OnPersonSelected(object sender, clsPerson Person)
         {
-            _Person = e.Person;
+            _Person = Person;
             if (_Person == null)
             {
                 ctlDriverLicenses1.Clear();

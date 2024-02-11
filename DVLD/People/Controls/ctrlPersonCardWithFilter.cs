@@ -21,26 +21,26 @@ namespace DVLD.Controls
         }
         */
         //steps to create standerd event
-        //1- define EventArgs.
-        public class SelectedPersonArgs : EventArgs
-        {
-            public clsPerson Person { get; }
-            public SelectedPersonArgs(clsPerson Person)
-            {
-                this.Person = Person;
-            }
+        //1- define EventArgs or any data type
+        //public class SelectedPersonArgs : EventArgs
+        //{
+        //    public clsPerson Person { get; }
+        //    public SelectedPersonArgs(clsPerson Person)
+        //    {
+        //        this.Person = Person;
+        //    }
 
 
-        }
+        //}
 
         //2- define event handler
-        public event EventHandler<SelectedPersonArgs> OnPersonSelected;
+        public event EventHandler<clsPerson> OnPersonSelected;
 
-        //3- define method to raise event with parameter
-        protected virtual void RaiseOnePersonSelected(SelectedPersonArgs e)
-        {
-            OnPersonSelected?.Invoke(this, e);
-        }
+        //3- define method to raise event with parameter or you could directly equip event handler with parameters.
+        //protected virtual void RaiseOnePersonSelected(clsPerson Person)
+        //{
+        //    OnPersonSelected?.Invoke(this, Person);
+        //}
 
 
 
@@ -121,7 +121,8 @@ namespace DVLD.Controls
             if (OnPersonSelected != null && FilterEnabled)
             {
                 //i sent whole person object as parameter with the event.
-                RaiseOnePersonSelected(new SelectedPersonArgs(ctlPersonCard1.SelectedPersonInfo));
+                //RaiseOnePersonSelected(new SelectedPersonArgs(ctlPersonCard1.SelectedPersonInfo));
+                OnPersonSelected(this, ctlPersonCard1.SelectedPersonInfo);
             }
             // Raise the event with a parameter
         }

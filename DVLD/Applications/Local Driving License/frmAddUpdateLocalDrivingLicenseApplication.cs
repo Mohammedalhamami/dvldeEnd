@@ -172,9 +172,9 @@ namespace DVLD
             ctlPersonCardWithFilter1.FilterFocus();
         }
 
-        private void ctlPersonCardWithFilter1_OnPersonSelected(object sender, Controls.ctlPersonCardWithFilter.SelectedPersonArgs e)
+        private void ctlPersonCardWithFilter1_OnPersonSelected(object sender, clsPerson Person)
         {
-            _SelectedPerson = e.Person;
+            _SelectedPerson = Person;
             ctlPersonCardWithFilter1.LoadPersonInfo(_SelectedPerson.PersonID);
         }
     }
