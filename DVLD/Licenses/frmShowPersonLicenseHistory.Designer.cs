@@ -94,8 +94,7 @@
             this.ctlPersonCardWithFilter1.ShowAddPerson = true;
             this.ctlPersonCardWithFilter1.Size = new System.Drawing.Size(760, 353);
             this.ctlPersonCardWithFilter1.TabIndex = 2;
-            this.ctlPersonCardWithFilter1.OnPersonSelected += new System.EventHandler<DVLD.Controls.ctlPersonCardWithFilter.SelectedPersonArgs>(this.ctlPersonCardWithFilter1_OnPersonSelected);
-            // 
+             // 
             // frmShowPersonLicenseHistory
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
