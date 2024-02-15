@@ -49,7 +49,7 @@ namespace DVLD
                 return;
             }
 
-            int ApplicationID = -1;
+            int? ApplicationID = null;
 
             bool IsReleased = ctlDriverLicenseInfoWithFilter2.SelectedLicenseInfo.ReleaseDetainedLicense(clsGlobal.CurrentUser.UserID, ref ApplicationID);
 

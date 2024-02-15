@@ -265,7 +265,7 @@ namespace DVLD_Business
             return DetainLicense.DetainID;
         }
 
-        public bool ReleaseDetainedLicense(int ReleasedByUserID, ref int ApplicationID)
+        public bool ReleaseDetainedLicense(int ReleasedByUserID, ref int? ApplicationID)
         {
             clsApplication ReleaseApplication = new clsApplication();
 
@@ -279,8 +279,8 @@ namespace DVLD_Business
 
             if (!ReleaseApplication.Save())
             {
-                ApplicationID = -1;
-                return (ApplicationID != -1);
+                ApplicationID = null;
+                return (ApplicationID == null);
             }
             ApplicationID = ReleaseApplication.ApplicationID;
 
