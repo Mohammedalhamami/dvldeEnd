@@ -13,40 +13,39 @@ namespace DVLD_DataAccess
             bool isFound = false;
             SqlConnection connection = new SqlConnection(clsDataAccessSettings.ConnectionString);
 
-            using (SqlConnection connection = new SqlConnection(clsDataAccessSettings.ConnectionString))
+
+            string query = "SELECT * FROM Applications WHERE ApplicationID=@ApplicationID";
+
+            SqlCommand command = new SqlCommand(query, connection);
+            command.Parameters.AddWithValue("@ApplicationID", ID);
+
+            try
             {
+                connection.Open();
 
-                string query = "SELECT * FROM Applications WHERE ApplicationID=@ApplicationID";
+                SqlDataReader reader = command.ExecuteReader();
 
-                SqlCommand command = new SqlCommand(query, connection);
-                command.Parameters.AddWithValue("@ApplicationID", ID);
-
-                try
+                if (reader.Read())
                 {
-                    connection.Open();
+                    isFound = true;
+                    PersonID = (int)reader["ApplicantPersonID"];
+                    Date = (DateTime)reader["ApplicationDate"];
+                    TypeID = (int)reader["ApplicationTypeID"];
+                    Status = (byte)reader["ApplicationStatus"];
+                    LastStatusDate = (DateTime)reader["LastStatusDate"];
+                    PaidFees = (decimal)reader["PaidFees"];
+                    CreatedByUserID = (int)reader["CreatedByUserID"];
 
-                    SqlDataReader reader = command.ExecuteReader();
-
-                    if (reader.Read())
-                    {
-                        isFound = true;
-                        PersonID = (int)reader["ApplicantPersonID"];
-                        Date = (DateTime)reader["ApplicationDate"];
-                        TypeID = (int)reader["ApplicationTypeID"];
-                        Status = (byte)reader["ApplicationStatus"];
-                        LastStatusDate = (DateTime)reader["LastStatusDate"];
-                        PaidFees = (decimal)reader["PaidFees"];
-                        CreatedByUserID = (int)reader["CreatedByUserID"];
-
-                    }
-                    reader.Close();
                 }
-                catch (Exception ex)
-                {
-                    isFound = false;
-                }
-
+                reader.Close();
             }
+            catch (Exception ex)
+            {
+                isFound = false;
+            }
+            finally { connection.Close(); }
+
+
             return isFound;
         }
 
