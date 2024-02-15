@@ -8,7 +8,7 @@ namespace DVLD_DataAccess
     {
         public static bool GetTestAppointmentByID(int TestAppointmentID, ref int TestTypeID, ref int LocalDrivingLicenseApplicationID,
                                                   ref DateTime AppointmentDate, ref decimal PaidFees, ref int CreatedByUserID, ref bool IsLocked,
-                                                  ref int RetakeTestApplicationID)
+                                                  ref int? RetakeTestApplicationID)
         {
             bool isFound = false;
 
@@ -36,16 +36,8 @@ namespace DVLD_DataAccess
                     PaidFees = (decimal)reader["PaidFees"];
                     CreatedByUserID = (int)reader["CreatedByUser"];
                     IsLocked = (bool)reader["IsLocked"];
-                    //RetakeTestApplicationID allows null in database so we should handle null;
-                    if (reader["RetakeTestApplicationID"] != DBNull.Value)
-                    {
-                        RetakeTestApplicationID = (int)reader["RetakeTestApplicationID"];
-                    }
-                    else
-                    {
-                        RetakeTestApplicationID = -1;
-                    }
-
+                    //RetakeTestApplicationID allows null in database so we should handle null by making it nullable.with int?;
+                    RetakeTestApplicationID = (int?)reader["RetakeTestApplicationID"] ?? null;
 
                 }
 
@@ -64,7 +56,7 @@ namespace DVLD_DataAccess
 
         public static bool GetLastTestAppointment(int LocalDrivingLicenseApplicationID, int TestTypeID, ref int TestAppointmentID,
                                                  ref DateTime AppointmentDate, ref decimal PaidFees, ref int CreatedByUserID, ref bool IsLocked,
-                                                 ref int RetakeTestApplicationID)
+                                                 ref int? RetakeTestApplicationID)
         {
             bool isFound = false;
 
@@ -94,14 +86,9 @@ namespace DVLD_DataAccess
                     CreatedByUserID = (int)reader["CreatedByUser"];
                     IsLocked = (bool)reader["IsLocked"];
                     //RetakeTestApplicationID allows null in database so we should handle null;
-                    if (reader["RetakeTestApplicationID"] != DBNull.Value)
-                    {
-                        RetakeTestApplicationID = (int)reader["RetakeTestApplicationID"];
-                    }
-                    else
-                    {
-                        RetakeTestApplicationID = -1;
-                    }
+
+                    RetakeTestApplicationID = (int?)reader["RetakeTestApplicationID"] ?? null;
+
 
 
                 }
@@ -190,7 +177,7 @@ namespace DVLD_DataAccess
         }
         public static int AddNewTestAppointment(int TestTypeID, int LocalDrivingLicenseApplicationID,
                                                   DateTime AppointmentDate, decimal PaidFees, int CreatedByUserID, bool IsLocked,
-                                                  int RetakeTestApplicationID)
+                                                  int? RetakeTestApplicationID)
         {
             int TestAppointmentID = -1;
 
@@ -211,17 +198,8 @@ namespace DVLD_DataAccess
             command.Parameters.AddWithValue("@PaidFees", PaidFees);
             command.Parameters.AddWithValue("@CreatedByUserID", CreatedByUserID);
             command.Parameters.AddWithValue("@IsLocked", IsLocked);
+            command.Parameters.AddWithValue("@RetakeTestApplicationID", RetakeTestApplicationID);
 
-
-
-            if (RetakeTestApplicationID != -1 && RetakeTestApplicationID != 0)
-            {
-                command.Parameters.AddWithValue("@RetakeTestApplicationID", RetakeTestApplicationID);
-            }
-            else
-            {
-                command.Parameters.AddWithValue("@RetakeTestApplicationID", System.DBNull.Value);
-            }
 
 
             try
@@ -246,7 +224,7 @@ namespace DVLD_DataAccess
 
         public static bool UpdateTestAppointment(int TestAppointmentID, int TestTypeID, int LocalDrivingLicenseApplicationID,
                                                  DateTime AppointmentDate, decimal PaidFees, int CreatedByUserID, bool IsLocked,
-                                                 int RetakeTestApplicationID)
+                                                 int? RetakeTestApplicationID)
 
         {
             int rowsAffected = 0;
@@ -271,16 +249,7 @@ namespace DVLD_DataAccess
             command.Parameters.AddWithValue("@PaidFees", PaidFees);
             command.Parameters.AddWithValue("@CreatedByUserID", CreatedByUserID);
             command.Parameters.AddWithValue("@IsLocked", IsLocked);
-
-            if (RetakeTestApplicationID != -1 && RetakeTestApplicationID != 0)
-            {
-                command.Parameters.AddWithValue("@RetakeTestApplicationID", RetakeTestApplicationID);
-            }
-            else
-            {
-                command.Parameters.AddWithValue("@RetakeTestApplicationID", System.DBNull.Value);
-            }
-
+            command.Parameters.AddWithValue("@RetakeTestApplicationID", RetakeTestApplicationID);
 
             try
             {

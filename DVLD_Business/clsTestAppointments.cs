@@ -21,7 +21,7 @@ namespace DVLD_Business
         public int CreatedByUserID { get; set; }
 
         public bool IsLocked { get; set; }
-        public int RetakeTestApplicationID { get; set; }
+        public int? RetakeTestApplicationID { get; set; }
         public clsApplication RetakeTestAppInfo { get; set; }
 
         public clsTestAppointments()
@@ -35,7 +35,7 @@ namespace DVLD_Business
             Mode = enMode.AddNew;
         }
 
-        public clsTestAppointments(int testAppointmentID, clsTestType.enTestType testTypeID, int localDrivingLicenseApplicationID, DateTime appointmentDate, decimal paidFees, int createdByUserID, bool isLocked, int RetakeTestApplicationID)
+        public clsTestAppointments(int testAppointmentID, clsTestType.enTestType testTypeID, int localDrivingLicenseApplicationID, DateTime appointmentDate, decimal paidFees, int createdByUserID, bool isLocked, int? RetakeTestApplicationID)
         {
             this.TestAppointmentID = testAppointmentID;
             this.TestTypeID = testTypeID;
@@ -44,7 +44,7 @@ namespace DVLD_Business
             this.PaidFees = paidFees;
             this.CreatedByUserID = createdByUserID;
             this.IsLocked = isLocked;
-            this.RetakeTestAppInfo = clsApplication.FindBaseApplication(RetakeTestApplicationID);
+            this.RetakeTestAppInfo = clsApplication.FindBaseApplication(RetakeTestApplicationID ?? -1);
             this.RetakeTestApplicationID = RetakeTestApplicationID;
             Mode = enMode.Update;
         }
@@ -52,7 +52,8 @@ namespace DVLD_Business
         public static clsTestAppointments Find(int TestAppointmentID)
         {
             int TestTypeID = -1;
-            int LocalDrivingLicenseApplicationID = -1, CreatedByUserID = -1, RetakeTestApplicationID = -1;
+            int LocalDrivingLicenseApplicationID = -1, CreatedByUserID = -1;
+            int? RetakeTestApplicationID = null;
             decimal PaidFees = 0;
             DateTime AppointmentDate = DateTime.Now;
             bool IsLocked = false;
@@ -64,7 +65,8 @@ namespace DVLD_Business
         }
         public static clsTestAppointments GetLastTestAppointment(int LocalDrivingLicenseApplicationID, int TestTypeID)
         {
-            int TestAppointmentID = -1, CreatedByUserID = -1, RetakeTestApplicationID = -1;
+            int TestAppointmentID = -1, CreatedByUserID = -1;
+            int? RetakeTestApplicationID = null;
             decimal PaidFees = 0;
             DateTime AppointmentDate = DateTime.Now;
             bool IsLocked = false;

@@ -71,7 +71,7 @@ namespace DVLD.Tests.Controls
             else
                 dtpScheduleDate.MinDate = _TestAppointment.AppointmentDate;
 
-            if (_TestAppointment.RetakeTestApplicationID == -1)
+            if (_TestAppointment.RetakeTestApplicationID == null)
             {
                 lblRetakeAppFees.Text = "0";
                 lblRetakeTestApplicationID.Text = "N/A";
@@ -175,7 +175,7 @@ namespace DVLD.Tests.Controls
 
                 if (!Application.Save())
                 {
-                    _TestAppointment.RetakeTestApplicationID = -1;
+                    _TestAppointment.RetakeTestApplicationID = null;
                     MessageBox.Show("Faild to Create Application", "Faild", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return false;
                 }
