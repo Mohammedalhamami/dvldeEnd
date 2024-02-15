@@ -11,63 +11,67 @@ namespace DVLD_DataAccess
                                                    ref decimal PaidFees, ref int CreatedByUserID)
         {
             bool isFound = false;
-            SqlConnection connection = new SqlConnection(clsDataAccessSettings.ConnectionString);
 
-            string query = "SELECT * FROM Applications WHERE ApplicationID=@ApplicationID";
-
-            SqlCommand command = new SqlCommand(query, connection);
-            command.Parameters.AddWithValue("@ApplicationID", ID);
-
-            try
+            using (SqlConnection connection = new SqlConnection(clsDataAccessSettings.ConnectionString))
             {
-                connection.Open();
 
-                SqlDataReader reader = command.ExecuteReader();
+                string query = "SELECT * FROM Applications WHERE ApplicationID=@ApplicationID";
 
-                if (reader.Read())
+                SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@ApplicationID", ID);
+
+                try
                 {
-                    isFound = true;
-                    PersonID = (int)reader["ApplicantPersonID"];
-                    Date = (DateTime)reader["ApplicationDate"];
-                    TypeID = (int)reader["ApplicationTypeID"];
-                    Status = (byte)reader["ApplicationStatus"];
-                    LastStatusDate = (DateTime)reader["LastStatusDate"];
-                    PaidFees = (decimal)reader["PaidFees"];
-                    CreatedByUserID = (int)reader["CreatedByUserID"];
+                    connection.Open();
 
+                    SqlDataReader reader = command.ExecuteReader();
+
+                    if (reader.Read())
+                    {
+                        isFound = true;
+                        PersonID = (int)reader["ApplicantPersonID"];
+                        Date = (DateTime)reader["ApplicationDate"];
+                        TypeID = (int)reader["ApplicationTypeID"];
+                        Status = (byte)reader["ApplicationStatus"];
+                        LastStatusDate = (DateTime)reader["LastStatusDate"];
+                        PaidFees = (decimal)reader["PaidFees"];
+                        CreatedByUserID = (int)reader["CreatedByUserID"];
+
+                    }
+                    reader.Close();
                 }
-                reader.Close();
+                catch (Exception ex)
+                {
+                    isFound = false;
+                }
+
             }
-            catch (Exception ex)
-            {
-                isFound = false;
-            }
-            finally { connection.Close(); }
             return isFound;
         }
 
         public static DataTable GetAllApplications()
         {
             DataTable dt = new DataTable();
-            SqlConnection connection = new SqlConnection(clsDataAccessSettings.ConnectionString);
-
-            string query = @"SELECT * FROM Applications ORDER BY ApplicationID";
-            SqlCommand command = new SqlCommand(query, connection);
-
-            try
+            using (SqlConnection connection = new SqlConnection(clsDataAccessSettings.ConnectionString))
             {
-                connection.Open();
 
-                SqlDataReader reader = command.ExecuteReader();
+                string query = @"SELECT * FROM Applications ORDER BY ApplicationID";
+                SqlCommand command = new SqlCommand(query, connection);
 
-                if (reader.HasRows)
-                    dt.Load(reader);
-                reader.Close();
+                try
+                {
+                    connection.Open();
+
+                    SqlDataReader reader = command.ExecuteReader();
+
+                    if (reader.HasRows)
+                        dt.Load(reader);
+                    reader.Close();
+                }
+                catch
+                {
+                }
             }
-            catch
-            {
-            }
-            finally { connection.Close(); }
             return dt;
         }
         public static int AddNewApplication(int PersonID, DateTime Date, int TypeID
