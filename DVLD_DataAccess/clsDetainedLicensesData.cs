@@ -7,7 +7,7 @@ namespace DVLD_DataAccess
     public static class clsDetainedLicensesData
     {
         public static bool GetDetainedLicenseInfoByID(int DetainID, ref int LicenseID, ref DateTime DetainDate, ref decimal FineFees,
-                ref int CreatedByUserID, ref bool IsReleased, ref DateTime? ReleaseDate, ref int? ReleasedByUserID, ref int ReleaseApplicationID)
+                ref int CreatedByUserID, ref bool IsReleased, ref DateTime? ReleaseDate, ref int? ReleasedByUserID, ref int? ReleaseApplicationID)
         {
 
             bool IsFound = false;
@@ -32,18 +32,10 @@ namespace DVLD_DataAccess
                     FineFees = (decimal)reader["FineFees"];
                     CreatedByUserID = (int)reader["CreatedByUserID"];
                     IsReleased = (bool)reader["IsReleased"];
+                    //All three below are nullable DataTypes nullable<T>;
                     ReleaseDate = (DateTime?)reader["ReleaseDate"] ?? null;
                     ReleasedByUserID = (int?)reader["ReleasedByUserID"] ?? null;
-
-                    if (reader["ReleaseApplicationID"] != DBNull.Value)
-                    {
-                        ReleaseApplicationID = (int)reader["ReleaseApplicationID"];
-
-                    }
-                    else
-                    {
-                        ReleaseApplicationID = -1;
-                    }
+                    ReleaseApplicationID = (int?)reader["ReleaseApplicationID"] ?? null;
 
                     IsFound = true;
                     reader.Close();
@@ -57,7 +49,7 @@ namespace DVLD_DataAccess
         }
 
         public static bool GetDetainedLicenseInfoByLicenseID(int LicenseID, ref int DetainID, ref DateTime DetainDate, ref decimal FineFees,
-               ref int CreatedByUserID, ref bool IsReleased, ref DateTime? ReleaseDate, ref int? ReleasedByUserID, ref int ReleaseApplicationID)
+               ref int CreatedByUserID, ref bool IsReleased, ref DateTime? ReleaseDate, ref int? ReleasedByUserID, ref int? ReleaseApplicationID)
         {
 
             bool IsFound = false;
@@ -82,18 +74,10 @@ namespace DVLD_DataAccess
                     FineFees = (decimal)reader["FineFees"];
                     CreatedByUserID = (int)reader["CreatedByUserID"];
                     IsReleased = (bool)reader["IsReleased"];
+
                     ReleaseDate = (DateTime?)reader["ReleaseDate"] ?? null;
                     ReleasedByUserID = (int?)reader["ReleasedByUserID"] ?? null;
-
-                    if (reader["ReleaseApplicationID"] != DBNull.Value)
-                    {
-                        ReleaseApplicationID = (int)reader["ReleaseApplicationID"];
-
-                    }
-                    else
-                    {
-                        ReleaseApplicationID = -1;
-                    }
+                    ReleaseApplicationID = (int?)reader["ReleaseApplicationID"] ?? null;
 
                     IsFound = true;
                     reader.Close();
@@ -218,7 +202,7 @@ namespace DVLD_DataAccess
             }
             return dt;
         }
-        public static bool ReleaseDetainedLicense(int DetainID, int? ReleasedByUserID, int ReleaseApplicationID)
+        public static bool ReleaseDetainedLicense(int DetainID, int? ReleasedByUserID, int? ReleaseApplicationID)
         {
             int AffectedRows = 0;
 
