@@ -7,7 +7,7 @@ namespace DVLD_DataAccess
     public static class clsDetainedLicensesData
     {
         public static bool GetDetainedLicenseInfoByID(int DetainID, ref int LicenseID, ref DateTime DetainDate, ref decimal FineFees,
-                ref int CreatedByUserID, ref bool IsReleased, ref DateTime ReleaseDate, ref int ReleasedByUserID, ref int ReleaseApplicationID)
+                ref int CreatedByUserID, ref bool IsReleased, ref DateTime? ReleaseDate, ref int ReleasedByUserID, ref int ReleaseApplicationID)
         {
 
             bool IsFound = false;
@@ -32,14 +32,9 @@ namespace DVLD_DataAccess
                     FineFees = (decimal)reader["FineFees"];
                     CreatedByUserID = (int)reader["CreatedByUserID"];
                     IsReleased = (bool)reader["IsReleased"];
-                    if (reader["ReleaseDate"] != DBNull.Value)
-                    {
-                        ReleaseDate = (DateTime)reader["ReleaseDate"];
-                    }
-                    else
-                    {
-                        ReleaseDate = DateTime.MaxValue;
-                    }
+                    ReleaseDate = (DateTime?)reader["ReleaseDate"] ?? null;
+
+
 
                     if (reader["ReleasedByUserID"] != DBNull.Value)
                     {
@@ -72,7 +67,7 @@ namespace DVLD_DataAccess
         }
 
         public static bool GetDetainedLicenseInfoByLicenseID(int LicenseID, ref int DetainID, ref DateTime DetainDate, ref decimal FineFees,
-               ref int CreatedByUserID, ref bool IsReleased, ref DateTime ReleaseDate, ref int ReleasedByUserID, ref int ReleaseApplicationID)
+               ref int CreatedByUserID, ref bool IsReleased, ref DateTime? ReleaseDate, ref int ReleasedByUserID, ref int ReleaseApplicationID)
         {
 
             bool IsFound = false;
@@ -97,14 +92,8 @@ namespace DVLD_DataAccess
                     FineFees = (decimal)reader["FineFees"];
                     CreatedByUserID = (int)reader["CreatedByUserID"];
                     IsReleased = (bool)reader["IsReleased"];
-                    if (reader["ReleaseDate"] != DBNull.Value)
-                    {
-                        ReleaseDate = (DateTime)reader["ReleaseDate"];
-                    }
-                    else
-                    {
-                        ReleaseDate = DateTime.MaxValue;
-                    }
+                    ReleaseDate = (DateTime?)reader["ReleaseDate"] ?? null;
+
 
                     if (reader["ReleasedByUserID"] != DBNull.Value)
                     {
