@@ -11,6 +11,7 @@ namespace DVLD_DataAccess
                                                    ref decimal PaidFees, ref int CreatedByUserID)
         {
             bool isFound = false;
+            SqlConnection connection = new SqlConnection(clsDataAccessSettings.ConnectionString);
 
             using (SqlConnection connection = new SqlConnection(clsDataAccessSettings.ConnectionString))
             {
