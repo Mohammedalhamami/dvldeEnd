@@ -18,7 +18,8 @@ namespace DVLD_Business
         public bool IsReleased { get; set; }
         //The ReleaseDate prop. whith ? is nullable<DateTime> datatype.
         public DateTime? ReleaseDate { get; set; }
-        public int ReleasedByUserID { get; set; }
+        //it is nullable with ?.
+        public int? ReleasedByUserID { get; set; }
         public clsUser ReleasedByUserInfo { get; set; }
         public int ReleaseApplicationID { get; set; }
 
@@ -31,11 +32,11 @@ namespace DVLD_Business
             this.CreatedByUserID = -1;
             this.IsReleased = false;
             this.ReleaseDate = null;
-            this.ReleasedByUserID = -1;
+            this.ReleasedByUserID = null;
             this.ReleaseApplicationID = -1;
             Mode = enMode.AddNew;
         }
-        public clsDetainedLicenses(int DetainID, int LicenseID, DateTime DetainDate, decimal FineFees, int CreatedByUserID, bool IsReleased, DateTime? ReleaseDate, int ReleasedByUserID, int ReleaseApplicationID)
+        public clsDetainedLicenses(int DetainID, int LicenseID, DateTime DetainDate, decimal FineFees, int CreatedByUserID, bool IsReleased, DateTime? ReleaseDate, int? ReleasedByUserID, int ReleaseApplicationID)
         {
 
             this.DetainID = DetainID;
@@ -47,7 +48,10 @@ namespace DVLD_Business
             this.IsReleased = IsReleased;
             this.ReleaseDate = ReleaseDate;
             this.ReleasedByUserID = ReleasedByUserID;
-            this.ReleasedByUserInfo = clsUser.FindByUserID(this.ReleasedByUserID);
+            /*Bcuz .FindByUserID parameter datatype int, i have to do this exp to check if
+             * ReleasedByUserID has num or null ? if null return -1;
+            */
+            this.ReleasedByUserInfo = clsUser.FindByUserID(this.ReleasedByUserID ?? -1);
             this.ReleaseApplicationID = ReleaseApplicationID;
 
             Mode = enMode.Update;
@@ -55,7 +59,8 @@ namespace DVLD_Business
 
         public static clsDetainedLicenses FindByID(int DetainID)
         {
-            int LicenseID = -1, CreatedByUserID = -1, ReleasedByUserID = -1, ReleaseApplicationID = -1;
+            int LicenseID = -1, CreatedByUserID = -1, ReleaseApplicationID = -1;
+            int? ReleasedByUserID = null;
             DateTime DetainDate = DateTime.MinValue;
             DateTime? ReleaseDate = null;
             bool IsReleased = false;
@@ -71,7 +76,8 @@ namespace DVLD_Business
         }
         public static clsDetainedLicenses FindByLicenseID(int LicenseID)
         {
-            int DetainID = -1, CreatedByUserID = -1, ReleasedByUserID = -1, ReleaseApplicationID = -1;
+            int DetainID = -1, CreatedByUserID = -1, ReleaseApplicationID = -1;
+            int? ReleasedByUserID = null;
             DateTime DetainDate = DateTime.MinValue;
             DateTime? ReleaseDate = null;
             bool IsReleased = false;
@@ -118,7 +124,7 @@ namespace DVLD_Business
             }
             return false;
         }
-        public bool ReleaseDetainedLicense(int ReleasedByUserID, int ReleaseApplicationID)
+        public bool ReleaseDetainedLicense(int? ReleasedByUserID, int ReleaseApplicationID)
         {
             return clsDetainedLicensesData.ReleaseDetainedLicense(this.DetainID, ReleasedByUserID, ReleaseApplicationID);
         }
