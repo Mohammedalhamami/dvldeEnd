@@ -10,6 +10,7 @@ namespace DVLD.Global_Classes
     {
         public static clsUser CurrentUser;
 
+        //we add attribute Serializable to make class has interface serialize.
         [Serializable]
         public class User
         {
@@ -17,6 +18,7 @@ namespace DVLD.Global_Classes
             public string Password { get; set; }
         }
 
+        //deserialization
         public static bool GetStoredCredential(ref string Username, ref string Password)
         {
             //this will get the stored username and password and will return true if found and false if not found.
