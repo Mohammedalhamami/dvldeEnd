@@ -1,6 +1,7 @@
 ﻿using DVLD_Business;
 using System;
 using System.IO;
+using System.Runtime.Serialization.Json;
 using System.Windows.Forms;
 
 namespace DVLD.Global_Classes
@@ -8,6 +9,13 @@ namespace DVLD.Global_Classes
     public static class clsGlobal
     {
         public static clsUser CurrentUser;
+
+        [Serializable]
+        public class User
+        {
+            public string UserName { get; set; }
+            public string Password { get; set; }
+        }
 
         public static bool GetStoredCredential(ref string Username, ref string Password)
         {
@@ -18,26 +26,27 @@ namespace DVLD.Global_Classes
                 string currentDirectory = System.IO.Directory.GetCurrentDirectory();
 
                 // Path for the file that contains the credential.
-                string filePath = currentDirectory + "\\data.txt";
+                string filePath = currentDirectory + "\\data.json";
+
+
+
 
                 // Check if the file exists before attempting to read it
                 if (File.Exists(filePath))
                 {
                     // Create a StreamReader to read from the file
-                    using (StreamReader reader = new StreamReader(filePath))
-                    {
-                        // Read data line by line until the end of the file
-                        string line;
-                        while ((line = reader.ReadLine()) != null)
-                        {
-                            Console.WriteLine(line); // Output each line of data to the console
-                            string[] result = line.Split(new string[] { "#//#" }, StringSplitOptions.None);
+                    DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(User));
 
-                            Username = result[0];
-                            Password = result[1];
-                        }
-                        return true;
+                    // Deserialize the object back
+                    using (FileStream stream = new FileStream("data.json", FileMode.Open))
+                    {
+                        User deserializedPerson = (User)serializer.ReadObject(stream);
+
+                        Username = deserializedPerson.UserName;
+                        Password = deserializedPerson.Password;
+
                     }
+                    return true;
                 }
                 else
                 {
@@ -51,6 +60,8 @@ namespace DVLD.Global_Classes
             }
 
         }
+
+        //serialization
         public static bool RememberUserNameAndPassword(string username, string password)
         {
             try
@@ -58,16 +69,26 @@ namespace DVLD.Global_Classes
                 //we selected current folder to save file in.
                 string CurrentDirectory = System.IO.Directory.GetCurrentDirectory();
 
-                string FilePath = CurrentDirectory + "\\data.txt";
+                string FilePath = CurrentDirectory + "\\data.json";
 
-                // concatonate username and passwrod withe seperator.
-                string dataToSave = username + "#//#" + password;
-
-                using (StreamWriter writer = new StreamWriter(FilePath))
+                if (File.Exists(FilePath))
                 {
-                    //write data to the file
-                    writer.WriteLine(dataToSave);
+                    User user = new User { UserName = username, Password = password };
+
+                    DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(User));
+                    using (MemoryStream stream = new MemoryStream())
+                    {
+                        serializer.WriteObject(stream, user);
+                        string jsonString = System.Text.Encoding.UTF8.GetString(stream.ToArray());
+
+                        // Save the JSON string to a file (optional)
+                        File.WriteAllText("data.json", jsonString);
+                    }
                     return true;
+                }
+                else
+                {
+                    return false;
                 }
             }
             catch (Exception ex)
