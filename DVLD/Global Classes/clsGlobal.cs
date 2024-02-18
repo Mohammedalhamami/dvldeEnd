@@ -1,9 +1,7 @@
 ﻿using DVLD_Business;
+using Microsoft.Win32;
 using System;
-using System.IO;
-using System.Runtime.Serialization.Json;
 using System.Windows.Forms;
-
 namespace DVLD.Global_Classes
 {
     public static class clsGlobal
@@ -24,36 +22,24 @@ namespace DVLD.Global_Classes
             //this will get the stored username and password and will return true if found and false if not found.
             try
             {
-                //gets the current project's directory
-                string currentDirectory = System.IO.Directory.GetCurrentDirectory();
+                string keyPath = @"HKEY_CURRENT_USER\SOFTWARE\LogInfo";
+                string valueName = "Log";
 
-                // Path for the file that contains the credential.
-                string filePath = currentDirectory + "\\data.json";
+                string valueData = Registry.GetValue(keyPath, valueName, null) as string;
 
-
-
-
-                // Check if the file exists before attempting to read it
-                if (File.Exists(filePath))
+                if (valueData != null)
                 {
-                    // Create a StreamReader to read from the file
-                    DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(User));
-
-                    // Deserialize the object back
-                    using (FileStream stream = new FileStream("data.json", FileMode.Open))
-                    {
-                        User deserializedPerson = (User)serializer.ReadObject(stream);
-
-                        Username = deserializedPerson.UserName;
-                        Password = deserializedPerson.Password;
-
-                    }
+                    string[] split = valueData.Split(new Char[] { '#', '/', });
+                    Username = split[0];
+                    Password = split[5];
                     return true;
                 }
                 else
                 {
+                    MessageBox.Show($"An error occurred");
                     return false;
                 }
+
             }
             catch (Exception ex)
             {
@@ -64,41 +50,28 @@ namespace DVLD.Global_Classes
         }
 
         //serialization
+
         public static bool RememberUserNameAndPassword(string username, string password)
         {
+
+            //we selected current folder to save file in.
+            //string CurrentDirectory = System.IO.Directory.GetCurrentDirectory();
+            string keyPath = @"HKEY_CURRENT_USER\SOFTWARE\LogInfo";
+            string valueName = "Log";
+            string valueData = string.Join("//#//", username, password);
+
             try
             {
-                //we selected current folder to save file in.
-                string CurrentDirectory = System.IO.Directory.GetCurrentDirectory();
 
-                string FilePath = CurrentDirectory + "\\data.json";
-
-                if (File.Exists(FilePath))
-                {
-                    User user = new User { UserName = username, Password = password };
-
-                    DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(User));
-                    using (MemoryStream stream = new MemoryStream())
-                    {
-                        serializer.WriteObject(stream, user);
-                        string jsonString = System.Text.Encoding.UTF8.GetString(stream.ToArray());
-
-                        // Save the JSON string to a file (optional)
-                        File.WriteAllText("data.json", jsonString);
-                    }
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
+                Registry.SetValue(keyPath, valueName, valueData, RegistryValueKind.String);
+                return true;
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                MessageBox.Show($"An error occurred: {ex.Message}");
+                MessageBox.Show($"Error: {e.Message}", "Error Registry", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
-
+            // string FilePath = CurrentDirectory + "\\data.jso
         }
     }
 }
