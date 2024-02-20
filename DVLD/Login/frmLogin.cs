@@ -1,6 +1,7 @@
 ﻿using DVLD.Global_Classes;
 using DVLD_Business;
 using System;
+using System.Diagnostics;
 using System.Windows.Forms;
 
 namespace DVLD
@@ -59,6 +60,12 @@ namespace DVLD
                 //we give user 3 trials to login, after that system will close.
                 if ((LoginTrials += 1) == 3)
                 {
+                    if (!EventLog.SourceExists("dvldEnd"))
+                    {
+                        EventLog.CreateEventSource("dvldEnd", "Application");
+                    }
+                    EventLog.WriteEntry("dvldEnd", "more than three times trial to log in", EventLogEntryType.Warning);
+
                     this.Close();
                 }
                 txtUserName.Focus();
