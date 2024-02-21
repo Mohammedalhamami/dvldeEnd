@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Data.SqlClient;
+using System.Diagnostics;
 
 namespace DVLD_DataAccess
 {
@@ -47,10 +48,13 @@ namespace DVLD_DataAccess
 
 
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                //Console.WriteLine("Error: " + ex.Message);
-                isFound = false;
+                if (!EventLog.SourceExists("dvldEnd"))
+                {
+                    EventLog.CreateEventSource("dvldEnd", "Application");
+                    EventLog.WriteEntry("dvldEnd", e.Message, EventLogEntryType.Error);
+                }
             }
             finally
             {
@@ -101,11 +105,7 @@ namespace DVLD_DataAccess
 
 
             }
-            catch (Exception ex)
-            {
-                //Console.WriteLine("Error: " + ex.Message);
-                isFound = false;
-            }
+            catch (Exception e) { if (!EventLog.SourceExists("dvldEnd")) { EventLog.CreateEventSource("dvldEnd", "Application"); EventLog.WriteEntry("dvldEnd", e.Message, EventLogEntryType.Error); } }
             finally
             {
                 connection.Close();
@@ -142,9 +142,13 @@ namespace DVLD_DataAccess
 
             }
 
-            catch (Exception ex)
+            catch (Exception e)
             {
-                // Console.WriteLine("Error: " + ex.Message);
+                if (!EventLog.SourceExists("dvldEnd"))
+                {
+                    EventLog.CreateEventSource("dvldEnd", "Application");
+                    EventLog.WriteEntry("dvldEnd", e.Message, EventLogEntryType.Error);
+                }
             }
             finally
             {
@@ -196,10 +200,13 @@ namespace DVLD_DataAccess
                 }
             }
 
-            catch (Exception ex)
+            catch (Exception e)
             {
-                //Console.WriteLine("Error: " + ex.Message);
-
+                if (!EventLog.SourceExists("dvldEnd"))
+                {
+                    EventLog.CreateEventSource("dvldEnd", "Application");
+                    EventLog.WriteEntry("dvldEnd", e.Message, EventLogEntryType.Error);
+                }
             }
 
             finally
@@ -244,11 +251,7 @@ namespace DVLD_DataAccess
                 rowsAffected = command.ExecuteNonQuery();
 
             }
-            catch (Exception ex)
-            {
-                //Console.WriteLine("Error: " + ex.Message);
-                return false;
-            }
+            catch (Exception e) { if (!EventLog.SourceExists("dvldEnd")) { EventLog.CreateEventSource("dvldEnd", "Application"); EventLog.WriteEntry("dvldEnd", e.Message, EventLogEntryType.Error); } }
 
             finally
             {

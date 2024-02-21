@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Data.SqlClient;
+using System.Diagnostics;
 
 namespace DVLD_DataAccess
 {
@@ -78,9 +79,13 @@ namespace DVLD_DataAccess
                 }
                 reader.Close();
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                isFound = false;
+                if (!EventLog.SourceExists("dvldEnd"))
+                {
+                    EventLog.CreateEventSource("dvldEnd", "Application");
+                    EventLog.WriteEntry("dvldEnd", e.Message, EventLogEntryType.Error);
+                }
             }
             finally
             {
@@ -163,9 +168,13 @@ namespace DVLD_DataAccess
                 }
                 reader.Close();
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                isFound = false;
+                if (!EventLog.SourceExists("dvldEnd"))
+                {
+                    EventLog.CreateEventSource("dvldEnd", "Application");
+                    EventLog.WriteEntry("dvldEnd", e.Message, EventLogEntryType.Error);
+                }
             }
             finally
             {
@@ -238,9 +247,13 @@ namespace DVLD_DataAccess
                 }
 
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-
+                if (!EventLog.SourceExists("dvldEnd"))
+                {
+                    EventLog.CreateEventSource("dvldEnd", "Application");
+                    EventLog.WriteEntry("dvldEnd", e.Message, EventLogEntryType.Error);
+                }
             }
             finally { connection.Close(); }
             return PersonID;
@@ -311,10 +324,7 @@ namespace DVLD_DataAccess
                 rowsAffected = command.ExecuteNonQuery();
 
             }
-            catch (Exception ex)
-            {
-                return false;
-            }
+            catch (Exception e) { if (!EventLog.SourceExists("dvldEnd")) { EventLog.CreateEventSource("dvldEnd", "Application"); EventLog.WriteEntry("dvldEnd", e.Message, EventLogEntryType.Error); } }
             finally { connection.Close(); }
             return (rowsAffected > 0);
         }
@@ -350,10 +360,7 @@ FROM            People INNER JOIN
                 }
                 reader.Close();
             }
-            catch (Exception ex)
-            {
-
-            }
+            catch (Exception e) { if (!EventLog.SourceExists("dvldEnd")) { EventLog.CreateEventSource("dvldEnd", "Application"); EventLog.WriteEntry("dvldEnd", e.Message, EventLogEntryType.Error); } }
             finally
             {
                 connection.Close();
@@ -379,10 +386,7 @@ FROM            People INNER JOIN
                 rowsAffected = command.ExecuteNonQuery();
 
             }
-            catch (Exception ex)
-            {
-                return false;
-            }
+            catch (Exception e) { if (!EventLog.SourceExists("dvldEnd")) { EventLog.CreateEventSource("dvldEnd", "Application"); EventLog.WriteEntry("dvldEnd", e.Message, EventLogEntryType.Error); } }
             finally
             {
                 connection.Close();
@@ -409,10 +413,7 @@ FROM            People INNER JOIN
 
                 isFound = (result != null);
             }
-            catch (Exception ex)
-            {
-
-            }
+            catch (Exception e) { if (!EventLog.SourceExists("dvldEnd")) { EventLog.CreateEventSource("dvldEnd", "Application"); EventLog.WriteEntry("dvldEnd", e.Message, EventLogEntryType.Error); } }
             finally { connection.Close(); }
             return isFound;
         }
@@ -436,10 +437,7 @@ FROM            People INNER JOIN
 
                 isFound = (result != null);
             }
-            catch (Exception ex)
-            {
-
-            }
+            catch (Exception e) { if (!EventLog.SourceExists("dvldEnd")) { EventLog.CreateEventSource("dvldEnd", "Application"); EventLog.WriteEntry("dvldEnd", e.Message, EventLogEntryType.Error); } }
             finally { connection.Close(); }
             return isFound;
         }

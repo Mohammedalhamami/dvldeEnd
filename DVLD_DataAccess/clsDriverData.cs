@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Data.SqlClient;
+using System.Diagnostics;
 
 namespace DVLD_DataAccess
 {
@@ -31,7 +32,14 @@ namespace DVLD_DataAccess
                 }
                 reader.Close();
             }
-            catch (Exception ex) { }
+            catch (Exception e)
+            {
+                if (!EventLog.SourceExists("dvldEnd"))
+                {
+                    EventLog.CreateEventSource("dvldEnd", "Application");
+                    EventLog.WriteEntry("dvldEnd", e.Message, EventLogEntryType.Error);
+                }
+            }
             finally { connection.Close(); }
             return IsFound;
         }
@@ -60,7 +68,15 @@ namespace DVLD_DataAccess
                 }
                 reader.Close();
             }
-            catch (Exception ex) { }
+            catch (Exception e)
+            {
+                if (!EventLog.SourceExists("dvldEnd"))
+                {
+                    EventLog.CreateEventSource("dvldEnd", "Application");
+                    EventLog.WriteEntry("dvldEnd", e.Message, EventLogEntryType.Error);
+                }
+            }
+
             finally { connection.Close(); }
             return IsFound;
         }
@@ -85,7 +101,14 @@ namespace DVLD_DataAccess
                 }
                 reader.Close();
             }
-            catch (Exception ex) { }
+            catch (Exception e)
+            {
+                if (!EventLog.SourceExists("dvldEnd"))
+                {
+                    EventLog.CreateEventSource("dvldEnd", "Application");
+                    EventLog.WriteEntry("dvldEnd", e.Message, EventLogEntryType.Error);
+                }
+            }
             finally { connection.Close(); }
             return dt;
         }
@@ -118,8 +141,13 @@ namespace DVLD_DataAccess
                     DriverID = ReturnedID;
                 }
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
+                if (!EventLog.SourceExists("dvldEnd"))
+                {
+                    EventLog.CreateEventSource("dvldEnd", "Application");
+                    EventLog.WriteEntry("dvldEnd", e.Message, EventLogEntryType.Error);
+                }
             }
             finally { connection.Close(); }
             return DriverID;
@@ -148,8 +176,13 @@ namespace DVLD_DataAccess
                 int AffectedRows = command.ExecuteNonQuery();
                 IsUpdated = (AffectedRows > 0);
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
+                if (!EventLog.SourceExists("dvldEnd"))
+                {
+                    EventLog.CreateEventSource("dvldEnd", "Application");
+                    EventLog.WriteEntry("dvldEnd", e.Message, EventLogEntryType.Error);
+                }
             }
             finally { connection.Close(); }
             return IsUpdated;

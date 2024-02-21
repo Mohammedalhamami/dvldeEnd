@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Data.SqlClient;
+using System.Diagnostics;
 
 namespace DVLD_DataAccess
 {
@@ -28,9 +29,13 @@ namespace DVLD_DataAccess
                     CountryName = (string)reader["CountryName"];
                 }
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-
+                if (!EventLog.SourceExists("dvldEnd"))
+                {
+                    EventLog.CreateEventSource("dvldEnd", "Application");
+                    EventLog.WriteEntry("dvldEnd", e.Message, EventLogEntryType.Error);
+                }
             }
             finally
             {
@@ -61,9 +66,13 @@ namespace DVLD_DataAccess
                     CountryID = (int)reader["CountryID"];
                 }
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-
+                if (!EventLog.SourceExists("dvldEnd"))
+                {
+                    EventLog.CreateEventSource("dvldEnd", "Application");
+                    EventLog.WriteEntry("dvldEnd", e.Message, EventLogEntryType.Error);
+                }
             }
             finally
             {
@@ -93,8 +102,13 @@ namespace DVLD_DataAccess
                     dt = null;
                 reader.Close();
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
+                if (!EventLog.SourceExists("dvldEnd"))
+                {
+                    EventLog.CreateEventSource("dvldEnd", "Application");
+                    EventLog.WriteEntry("dvldEnd", e.Message, EventLogEntryType.Error);
+                }
                 dt = null;
             }
             finally { connectoin.Close(); }

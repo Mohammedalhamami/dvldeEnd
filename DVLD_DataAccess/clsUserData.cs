@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Data.SqlClient;
+using System.Diagnostics;
 
 namespace DVLD_DataAccess
 {
@@ -33,9 +34,13 @@ namespace DVLD_DataAccess
                 }
                 reader.Close();
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                isFound = false;
+                if (!EventLog.SourceExists("dvldEnd"))
+                {
+                    EventLog.CreateEventSource("dvldEnd", "Application");
+                    EventLog.WriteEntry("dvldEnd", e.Message, EventLogEntryType.Error);
+                }
             }
             finally { connection.Close(); }
             return isFound;
@@ -67,10 +72,7 @@ namespace DVLD_DataAccess
                 }
                 reader.Close();
             }
-            catch (Exception ex)
-            {
-                isFound = false;
-            }
+            catch (Exception e) { if (!EventLog.SourceExists("dvldEnd")) { EventLog.CreateEventSource("dvldEnd", "Application"); EventLog.WriteEntry("dvldEnd", e.Message, EventLogEntryType.Error); } }
             finally { connection.Close(); }
             return isFound;
         }
@@ -102,10 +104,7 @@ namespace DVLD_DataAccess
                 }
                 reader.Close();
             }
-            catch (Exception ex)
-            {
-                isFound = false;
-            }
+            catch (Exception e) { if (!EventLog.SourceExists("dvldEnd")) { EventLog.CreateEventSource("dvldEnd", "Application"); EventLog.WriteEntry("dvldEnd", e.Message, EventLogEntryType.Error); } }
             finally { connection.Close(); }
             return isFound;
         }
@@ -135,9 +134,13 @@ namespace DVLD_DataAccess
                     UserID = InsertedID;
                 }
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-
+                if (!EventLog.SourceExists("dvldEnd"))
+                {
+                    EventLog.CreateEventSource("dvldEnd", "Application");
+                    EventLog.WriteEntry("dvldEnd", e.Message, EventLogEntryType.Error);
+                }
             }
             finally { connection.Close(); }
             return UserID;
@@ -165,10 +168,7 @@ namespace DVLD_DataAccess
 
                 isUpdated = (RowsAffcted > 0);
             }
-            catch (Exception ex)
-            {
-
-            }
+            catch (Exception e) { if (!EventLog.SourceExists("dvldEnd")) { EventLog.CreateEventSource("dvldEnd", "Application"); EventLog.WriteEntry("dvldEnd", e.Message, EventLogEntryType.Error); } }
             finally { connection.Close(); }
             return isUpdated;
         }
@@ -193,8 +193,13 @@ namespace DVLD_DataAccess
                     dt.Load(reader);
                 reader.Close();
             }
-            catch
+            catch (Exception e)
             {
+                if (!EventLog.SourceExists("dvldEnd"))
+                {
+                    EventLog.CreateEventSource("dvldEnd", "Application");
+                    EventLog.WriteEntry("dvldEnd", e.Message, EventLogEntryType.Error);
+                }
             }
             finally { connection.Close(); }
             return dt;
@@ -215,9 +220,13 @@ namespace DVLD_DataAccess
                 rowsAffected = command.ExecuteNonQuery();
 
             }
-            catch
+            catch (Exception e)
             {
-                return false;
+                if (!EventLog.SourceExists("dvldEnd"))
+                {
+                    EventLog.CreateEventSource("dvldEnd", "Application");
+                    EventLog.WriteEntry("dvldEnd", e.Message, EventLogEntryType.Error);
+                }
             }
             finally { connection.Close(); }
             return (rowsAffected > 0);
@@ -240,9 +249,13 @@ namespace DVLD_DataAccess
 
                 isExist = (Result > 0);
             }
-            catch
+            catch (Exception e)
             {
-
+                if (!EventLog.SourceExists("dvldEnd"))
+                {
+                    EventLog.CreateEventSource("dvldEnd", "Application");
+                    EventLog.WriteEntry("dvldEnd", e.Message, EventLogEntryType.Error);
+                }
             }
             finally { connection.Close(); }
             return isExist;
@@ -264,9 +277,13 @@ namespace DVLD_DataAccess
 
                 isExist = (Result > 0);
             }
-            catch
+            catch (Exception e)
             {
-
+                if (!EventLog.SourceExists("dvldEnd"))
+                {
+                    EventLog.CreateEventSource("dvldEnd", "Application");
+                    EventLog.WriteEntry("dvldEnd", e.Message, EventLogEntryType.Error);
+                }
             }
             finally { connection.Close(); }
             return isExist;
@@ -290,9 +307,13 @@ namespace DVLD_DataAccess
 
 
             }
-            catch
+            catch (Exception e)
             {
-
+                if (!EventLog.SourceExists("dvldEnd"))
+                {
+                    EventLog.CreateEventSource("dvldEnd", "Application");
+                    EventLog.WriteEntry("dvldEnd", e.Message, EventLogEntryType.Error);
+                }
             }
             finally { connection.Close(); }
             return isExist;
@@ -318,10 +339,7 @@ namespace DVLD_DataAccess
 
                 isUpdated = (RowsAffcted > 0);
             }
-            catch (Exception ex)
-            {
-
-            }
+            catch (Exception e) { if (!EventLog.SourceExists("dvldEnd")) { EventLog.CreateEventSource("dvldEnd", "Application"); EventLog.WriteEntry("dvldEnd", e.Message, EventLogEntryType.Error); } }
             finally { connection.Close(); }
             return isUpdated;
         }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Data.SqlClient;
+using System.Diagnostics;
 
 namespace DVLD_DataAccess
 {
@@ -68,8 +69,15 @@ namespace DVLD_DataAccess
                         dt.Load(reader);
                     reader.Close();
                 }
-                catch
+                catch (Exception e)
                 {
+                    if (!EventLog.SourceExists("dvldEnd"))
+                    {
+
+                        EventLog.CreateEventSource("dvldEnd", "Application");
+                        EventLog.WriteEntry("dvldEnd", e.Message, EventLogEntryType.Error);
+
+                    }
                 }
             }
             return dt;
@@ -108,9 +116,13 @@ namespace DVLD_DataAccess
                     ApplicationID = InsertedID;
                 }
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-
+                if (!EventLog.SourceExists("dvldEnd"))
+                {
+                    EventLog.CreateEventSource("dvldEnd", "Application");
+                    EventLog.WriteEntry("dvldEnd", e.Message, EventLogEntryType.Error);
+                }
             }
             finally { connection.Close(); }
             return ApplicationID;
@@ -145,9 +157,15 @@ namespace DVLD_DataAccess
 
                 isUpdated = (RowsAffcted > 0);
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
+                if (!EventLog.SourceExists("dvldEnd"))
+                {
 
+                    EventLog.CreateEventSource("dvldEnd", "Application");
+                    EventLog.WriteEntry("dvldEnd", e.Message, EventLogEntryType.Error);
+
+                }
             }
             finally { connection.Close(); }
             return isUpdated;
@@ -170,9 +188,13 @@ namespace DVLD_DataAccess
                 IsDeleted = (RowsAffected > 0);
 
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-
+                if (!EventLog.SourceExists("dvldEnd"))
+                {
+                    EventLog.CreateEventSource("dvldEnd", "Application");
+                    EventLog.WriteEntry("dvldEnd", e.Message, EventLogEntryType.Error);
+                }
             }
             finally { connection.Close(); }
             return IsDeleted;
@@ -195,9 +217,13 @@ namespace DVLD_DataAccess
 
                 IsExist = (result != null);
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-
+                if (!EventLog.SourceExists("dvldEnd"))
+                {
+                    EventLog.CreateEventSource("dvldEnd", "Application");
+                    EventLog.WriteEntry("dvldEnd", e.Message, EventLogEntryType.Error);
+                }
             }
             finally { connection.Close(); }
             return IsExist;
@@ -225,9 +251,13 @@ namespace DVLD_DataAccess
                     ActiveApplicationID = InsertedID;
                 }
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-
+                if (!EventLog.SourceExists("dvldEnd"))
+                {
+                    EventLog.CreateEventSource("dvldEnd", "Application");
+                    EventLog.WriteEntry("dvldEnd", e.Message, EventLogEntryType.Error);
+                }
             }
             finally { connection.Close(); }
             return ActiveApplicationID;
@@ -259,9 +289,13 @@ namespace DVLD_DataAccess
                     ActiveApplicationID = InsertedID;
                 }
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-
+                if (!EventLog.SourceExists("dvldEnd"))
+                {
+                    EventLog.CreateEventSource("dvldEnd", "Application");
+                    EventLog.WriteEntry("dvldEnd", e.Message, EventLogEntryType.Error);
+                }
             }
             finally { connection.Close(); }
             return ActiveApplicationID;
@@ -286,9 +320,13 @@ namespace DVLD_DataAccess
                 RowsAffected = command.ExecuteNonQuery();
 
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-
+                if (!EventLog.SourceExists("dvldEnd"))
+                {
+                    EventLog.CreateEventSource("dvldEnd", "Application");
+                    EventLog.WriteEntry("dvldEnd", e.Message, EventLogEntryType.Error);
+                }
             }
             finally { connection.Close(); }
             return RowsAffected > 0;

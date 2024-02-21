@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Data.SqlClient;
+using System.Diagnostics;
 
 namespace DVLD_DataAccess
 {
@@ -41,7 +42,14 @@ namespace DVLD_DataAccess
                 }
                 reader.Close();
             }
-            catch (Exception ex) { }
+            catch (Exception e)
+            {
+                if (!EventLog.SourceExists("dvldEnd"))
+                {
+                    EventLog.CreateEventSource("dvldEnd", "Application");
+                    EventLog.WriteEntry("dvldEnd", e.Message, EventLogEntryType.Error);
+                }
+            }
             finally { connection.Close(); }
             return IsFound;
         }
@@ -65,7 +73,14 @@ namespace DVLD_DataAccess
                 }
                 reader.Close();
             }
-            catch (Exception ex) { }
+            catch (Exception e)
+            {
+                if (!EventLog.SourceExists("dvldEnd"))
+                {
+                    EventLog.CreateEventSource("dvldEnd", "Application");
+                    EventLog.WriteEntry("dvldEnd", e.Message, EventLogEntryType.Error);
+                }
+            }
             finally { connection.Close(); }
             return dt;
         }
@@ -94,7 +109,14 @@ namespace DVLD_DataAccess
                 }
                 reader.Close();
             }
-            catch (Exception ex) { }
+            catch (Exception e)
+            {
+                if (!EventLog.SourceExists("dvldEnd"))
+                {
+                    EventLog.CreateEventSource("dvldEnd", "Application");
+                    EventLog.WriteEntry("dvldEnd", e.Message, EventLogEntryType.Error);
+                }
+            }
             finally { connection.Close(); }
             return dt;
         }
@@ -160,8 +182,13 @@ namespace DVLD_DataAccess
                     LicenseID = ReturnedID;
                 }
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
+                if (!EventLog.SourceExists("dvldEnd"))
+                {
+                    EventLog.CreateEventSource("dvldEnd", "Application");
+                    EventLog.WriteEntry("dvldEnd", e.Message, EventLogEntryType.Error);
+                }
             }
             finally { connection.Close(); }
             return LicenseID;
@@ -214,8 +241,13 @@ namespace DVLD_DataAccess
                 int AffectedRows = command.ExecuteNonQuery();
                 IsUpdated = (AffectedRows > 0);
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
+                if (!EventLog.SourceExists("dvldEnd"))
+                {
+                    EventLog.CreateEventSource("dvldEnd", "Application");
+                    EventLog.WriteEntry("dvldEnd", e.Message, EventLogEntryType.Error);
+                }
             }
             finally { connection.Close(); }
             return IsUpdated;
@@ -250,10 +282,7 @@ namespace DVLD_DataAccess
                 }
 
             }
-            catch (Exception ex)
-            {
-
-            }
+            catch (Exception e) { if (!EventLog.SourceExists("dvldEnd")) { EventLog.CreateEventSource("dvldEnd", "Application"); EventLog.WriteEntry("dvldEnd", e.Message, EventLogEntryType.Error); } }
             finally { connection.Close(); }
             return ActiveLicenseID;
         }
@@ -276,7 +305,7 @@ namespace DVLD_DataAccess
                 IsDeactivated = AffectedRows > 0;
 
             }
-            catch (Exception ex) { }
+            catch (Exception e) { if (!EventLog.SourceExists("dvldEnd")) { EventLog.CreateEventSource("dvldEnd", "Application"); EventLog.WriteEntry("dvldEnd", e.Message, EventLogEntryType.Error); } }
             finally { connection.Close(); }
             return IsDeactivated;
         }
