@@ -1,6 +1,8 @@
 ﻿using DVLD_Business;
 using Microsoft.Win32;
 using System;
+using System.Security.Cryptography;
+using System.Text;
 using System.Windows.Forms;
 namespace DVLD.Global_Classes
 {
@@ -43,17 +45,24 @@ namespace DVLD.Global_Classes
             }
             catch (Exception ex)
             {
+
                 MessageBox.Show($"An error occurred: {ex.Message}");
                 return false;
             }
 
         }
 
-        //serialization
+
 
         public static bool RememberUserNameAndPassword(string username, string password)
         {
+            //Encrypting password for one-way using hasing sha-256;
+            using (SHA256 hash = SHA256.Create())
+            {
+                byte[] hashBytes = hash.ComputeHash(Encoding.UTF8.GetBytes(password));
 
+                password = BitConverter.ToString(hashBytes).Replace("-", "").ToLower();
+            }
             //we selected current folder to save file in.
             //string CurrentDirectory = System.IO.Directory.GetCurrentDirectory();
             string keyPath = @"HKEY_CURRENT_USER\SOFTWARE\LogInfo";
