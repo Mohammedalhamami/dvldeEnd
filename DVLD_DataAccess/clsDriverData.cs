@@ -84,12 +84,11 @@ namespace DVLD_DataAccess
         public static DataTable GetAllDrivers()
         {
             DataTable dt = new DataTable();
-            SqlConnection connection = new SqlConnection(clsDataAccessSettings.ConnectionString);
+            using (SqlConnection connection = new SqlConnection(clsDataAccessSettings.ConnectionString))
+            {
 
-            string query = "SELECT * FROM Drivers_View order by FullName";
-
-            SqlCommand command = new SqlCommand(query, connection);
-
+            SqlCommand command = new SqlCommand("SP_GetAllDrivers", connection);
+                command.CommandType = CommandType.StoredProcedure;
             try
             {
                 connection.Open();
@@ -109,7 +108,8 @@ namespace DVLD_DataAccess
                     EventLog.WriteEntry("dvldEnd", e.Message, EventLogEntryType.Error);
                 }
             }
-            finally { connection.Close(); }
+           
+            }
             return dt;
         }
         public static int AddNewDriver(int PersonID, int CreatedByUserID)

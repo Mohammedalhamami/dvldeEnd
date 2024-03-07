@@ -77,13 +77,11 @@ namespace DVLD_DataAccess
         public static DataTable GetAllLocalDrivingLicenseApplications()
         {
             DataTable dt = new DataTable();
-            SqlConnection connection = new SqlConnection(clsDataAccessSettings.ConnectionString);
+            using (SqlConnection connection = new SqlConnection(clsDataAccessSettings.ConnectionString))
+            {
 
-            string query = @"SELECT *
-                              FROM LocalDrivingLicenseApplications_View
-                              order by ApplicationDate Desc";
-            SqlCommand command = new SqlCommand(query, connection);
-
+            SqlCommand command = new SqlCommand("SP_GetAllLocalDrivingLicenseApplications", connection);
+                command.CommandType = CommandType.StoredProcedure;
             try
             {
                 connection.Open();
@@ -103,6 +101,7 @@ namespace DVLD_DataAccess
                 }
             }
             finally { connection.Close(); }
+            }
             return dt;
         }
 

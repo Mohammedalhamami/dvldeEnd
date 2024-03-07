@@ -328,22 +328,11 @@ namespace DVLD_DataAccess
         public static DataTable GetAllPeople()
         {
             DataTable dt = new DataTable();
-            SqlConnection connection = new SqlConnection(clsDataAccessSettings.ConnectionString);
+            using (SqlConnection connection = new SqlConnection(clsDataAccessSettings.ConnectionString))
+            {
 
-            string query = @"SELECT        People.PersonID, People.NationalNo, People.FirstName, People.SecondName, People.ThirdName, People.LastName,
-              People.DateOfBirth, People.Gender,
-			  CASE
-			  when People.Gender = 0 then 'Male'
-			  else 'Female'
-			  end as GenderCaption,
-			  People.Address, People.Email, Countries.CountryName, 
-                         People.NationalityCountryID, People.Phone, People.ImagePath
-FROM            People INNER JOIN
-                         Countries ON People.NationalityCountryID = Countries.CountryID
-						 order by People.FirstName;";
-
-            SqlCommand command = new SqlCommand(query, connection);
-
+            SqlCommand command = new SqlCommand("SP_GetAllPeople", connection);
+                command.CommandType = CommandType.StoredProcedure;
             try
             {
                 connection.Open();
@@ -357,9 +346,7 @@ FROM            People INNER JOIN
                 reader.Close();
             }
             catch (Exception e) { if (!EventLog.SourceExists("dvldEnd")) { EventLog.CreateEventSource("dvldEnd", "Application"); EventLog.WriteEntry("dvldEnd", e.Message, EventLogEntryType.Error); } }
-            finally
-            {
-                connection.Close();
+           
             }
             return dt;
         }
