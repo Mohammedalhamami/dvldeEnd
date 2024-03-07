@@ -191,72 +191,68 @@ namespace DVLD_DataAccess
         {
             int PersonID = -1;
 
-            SqlConnection connection = new SqlConnection(clsDataAccessSettings.ConnectionString);
-
-            string query = @"INSERT INTO People
-           (NationalNo ,FirstName ,SecondName ,ThirdName ,LastName ,DateOfBirth ,Gender ,Address
-           ,Phone ,Email ,NationalityCountryID ,ImagePath)
-
-     VALUES(
-          @NationalNo, @FirstName, @SecondName, @ThirdName, @LastName, @DateOfBirth
-          ,@Gender, @Address, @Phone, @Email, @NationalityCountryID, @ImagePath
-        );
-        SELECT SCOPE_IDENTITY();";
-
-            SqlCommand command = new SqlCommand(query, connection);
-
-            command.Parameters.AddWithValue("@NationalNo", NationalNo);
-            command.Parameters.AddWithValue("@FirstName", FirstName);
-            command.Parameters.AddWithValue("@SecondName", SecondName);
-
-            if (ThirdName != "" && ThirdName != null)
+            using (SqlConnection connection = new SqlConnection(clsDataAccessSettings.ConnectionString))
             {
-                command.Parameters.AddWithValue("@ThirdName", ThirdName);
-            }
-            else
-            {
-                command.Parameters.AddWithValue("@ThirdName", System.DBNull.Value);
-            }
+               
 
-            command.Parameters.AddWithValue("@LastName", LastName);
-            command.Parameters.AddWithValue("@DateOfBirth", DateOfBirth);
-            command.Parameters.AddWithValue("@Gender", Gender);
-            command.Parameters.AddWithValue("@Address", Address);
-            command.Parameters.AddWithValue("@Phone", Phone);
+                SqlCommand command = new SqlCommand("SP_AddNewPerson", connection);
+                //user stored procedure insted of hard query.
+                command.CommandType = CommandType.StoredProcedure;
 
-            if (Email != "" && Email != null)
-                command.Parameters.AddWithValue("@Email", Email);
-            else
-                command.Parameters.AddWithValue("@Email", System.DBNull.Value);
+                command.Parameters.AddWithValue("@NationalNo", NationalNo);
+                command.Parameters.AddWithValue("@FirstName", FirstName);
+                command.Parameters.AddWithValue("@SecondName", SecondName);
 
-            command.Parameters.AddWithValue("@NationalityCountryID", NationalityCountryID);
-
-            if (ImagePath != "" && ImagePath != null)
-                command.Parameters.AddWithValue("@ImagePath", ImagePath);
-            else
-                command.Parameters.AddWithValue("@ImagePath", System.DBNull.Value);
-            try
-            {
-                connection.Open();
-
-                object Result = command.ExecuteScalar();
-
-                if (Result != null && int.TryParse(Result.ToString(), out int InsertedID))
+                if (ThirdName != "" && ThirdName != null)
                 {
-                    PersonID = InsertedID;
+                    command.Parameters.AddWithValue("@ThirdName", ThirdName);
+                }
+                else
+                {
+                    command.Parameters.AddWithValue("@ThirdName", System.DBNull.Value);
                 }
 
-            }
-            catch (Exception e)
-            {
-                if (!EventLog.SourceExists("dvldEnd"))
-                {
-                    EventLog.CreateEventSource("dvldEnd", "Application");
-                    EventLog.WriteEntry("dvldEnd", e.Message, EventLogEntryType.Error);
+                command.Parameters.AddWithValue("@LastName", LastName);
+                command.Parameters.AddWithValue("@DateOfBirth", DateOfBirth);
+                command.Parameters.AddWithValue("@Gender", Gender);
+                command.Parameters.AddWithValue("@Address", Address);
+                command.Parameters.AddWithValue("@Phone", Phone);
+
+                if (Email != "" && Email != null)
+                    command.Parameters.AddWithValue("@Email", Email);
+                else
+                    command.Parameters.AddWithValue("@Email", System.DBNull.Value);
+
+                command.Parameters.AddWithValue("@NationalityCountryID", NationalityCountryID);
+
+                if (ImagePath != "" && ImagePath != null)
+                    command.Parameters.AddWithValue("@ImagePath", ImagePath);
+                else
+                    command.Parameters.AddWithValue("@ImagePath", System.DBNull.Value);
+                try { 
+                    connection.Open();
+
+                    object Result = command.ExecuteScalar();
+
+                    if (Result != null && int.TryParse(Result.ToString(), out int InsertedID))
+                    {
+                        PersonID = InsertedID;
+                    }
+
                 }
+                catch (Exception e)
+                {
+                    if (!EventLog.SourceExists("dvldEnd"))
+                    {
+                        EventLog.CreateEventSource("dvldEnd", "Application");
+                        EventLog.WriteEntry("dvldEnd", e.Message, EventLogEntryType.Error);
+                    }
+                }
+                 
+                return PersonID;
             }
-            finally { connection.Close(); }
-            return PersonID;
+
+              
         }
 
 
