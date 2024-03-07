@@ -343,11 +343,11 @@ namespace DVLD_DataAccess
         {
             int rowsAffected = 0;
 
-            SqlConnection connection = new SqlConnection(clsDataAccessSettings.ConnectionString);
+            using (SqlConnection connection = new SqlConnection(clsDataAccessSettings.ConnectionString))
+            {
 
-            string query = @"DELETE People WHERE PersonID=@PersonID";
-
-            SqlCommand command = new SqlCommand(query, connection);
+                SqlCommand command = new SqlCommand("SP_DeletePerson", connection);
+                command.CommandType = CommandType.StoredProcedure;
             command.Parameters.AddWithValue("@PersonID", PersonID);
 
             try
@@ -358,9 +358,7 @@ namespace DVLD_DataAccess
 
             }
             catch (Exception e) { if (!EventLog.SourceExists("dvldEnd")) { EventLog.CreateEventSource("dvldEnd", "Application"); EventLog.WriteEntry("dvldEnd", e.Message, EventLogEntryType.Error); } }
-            finally
-            {
-                connection.Close();
+            
             }
             return (rowsAffected > 0);
         }
