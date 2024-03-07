@@ -193,7 +193,7 @@ namespace DVLD_DataAccess
 
             using (SqlConnection connection = new SqlConnection(clsDataAccessSettings.ConnectionString))
             {
-               
+
 
                 SqlCommand command = new SqlCommand("SP_AddNewPerson", connection);
                 //user stored procedure insted of hard query.
@@ -229,7 +229,8 @@ namespace DVLD_DataAccess
                     command.Parameters.AddWithValue("@ImagePath", ImagePath);
                 else
                     command.Parameters.AddWithValue("@ImagePath", System.DBNull.Value);
-                try { 
+                try
+                {
                     connection.Open();
 
                     object Result = command.ExecuteScalar();
@@ -248,11 +249,11 @@ namespace DVLD_DataAccess
                         EventLog.WriteEntry("dvldEnd", e.Message, EventLogEntryType.Error);
                     }
                 }
-                 
+
                 return PersonID;
             }
 
-              
+
         }
 
 
@@ -263,65 +264,52 @@ namespace DVLD_DataAccess
         {
             int rowsAffected = 0;
 
-            SqlConnection connection = new SqlConnection(clsDataAccessSettings.ConnectionString);
-
-            string query = @"UPDATE People
-           SET NationalNo = @NationalNo,
-               FirstName = @FirstName,
-               SecondName = @SecondName,
-               ThirdName = @ThirdName,
-               LastName = @LastName,
-               DateOfBirth = @DateOfBirth,
-               Gender = @Gender,
-               Address = @Address,
-               Phone = @Phone,
-               Email = @Email,
-               NationalityCountryID = @NationalityCountryID,
-               ImagePath = @ImagePath
-                WHERE PersonID = @PersonID";
-
-            SqlCommand command = new SqlCommand(query, connection);
-
-            command.Parameters.AddWithValue("@PersonID", PersonID);
-            command.Parameters.AddWithValue("@NationalNo", NationalNo);
-            command.Parameters.AddWithValue("@FirstName", FirstName);
-            command.Parameters.AddWithValue("@SecondName", SecondName);
-
-            if (ThirdName != "" && ThirdName != null)
+            using (SqlConnection connection = new SqlConnection(clsDataAccessSettings.ConnectionString))
             {
-                command.Parameters.AddWithValue("@ThirdName", ThirdName);
+
+                SqlCommand command = new SqlCommand("SP_UpdatePerson", connection);
+                command.CommandType = CommandType.StoredProcedure;
+
+                command.Parameters.AddWithValue("@PersonID", PersonID);
+                command.Parameters.AddWithValue("@NationalNo", NationalNo);
+                command.Parameters.AddWithValue("@FirstName", FirstName);
+                command.Parameters.AddWithValue("@SecondName", SecondName);
+
+                if (ThirdName != "" && ThirdName != null)
+                {
+                    command.Parameters.AddWithValue("@ThirdName", ThirdName);
+                }
+                else
+                {
+                    command.Parameters.AddWithValue("@ThirdName", System.DBNull.Value);
+                }
+
+                command.Parameters.AddWithValue("@LastName", LastName);
+                command.Parameters.AddWithValue("@DateOfBirth", DateOfBirth);
+                command.Parameters.AddWithValue("@Gender", Gender);
+                command.Parameters.AddWithValue("@Address", Address);
+                command.Parameters.AddWithValue("@Phone", Phone);
+
+                if (Email != "" && Email != null)
+                    command.Parameters.AddWithValue("@Email", Email);
+                else
+                    command.Parameters.AddWithValue("@Email", System.DBNull.Value);
+
+                command.Parameters.AddWithValue("@NationalityCountryID", NationalityCountryID);
+
+                if (ImagePath != "" && ImagePath != null)
+                    command.Parameters.AddWithValue("@ImagePath", ImagePath);
+                else
+                    command.Parameters.AddWithValue("@ImagePath", System.DBNull.Value);
+                try
+                {
+                    connection.Open();
+
+                    rowsAffected = command.ExecuteNonQuery();
+
+                }
+                catch (Exception e) { if (!EventLog.SourceExists("dvldEnd")) { EventLog.CreateEventSource("dvldEnd", "Application"); EventLog.WriteEntry("dvldEnd", e.Message, EventLogEntryType.Error); } }
             }
-            else
-            {
-                command.Parameters.AddWithValue("@ThirdName", System.DBNull.Value);
-            }
-
-            command.Parameters.AddWithValue("@LastName", LastName);
-            command.Parameters.AddWithValue("@DateOfBirth", DateOfBirth);
-            command.Parameters.AddWithValue("@Gender", Gender);
-            command.Parameters.AddWithValue("@Address", Address);
-            command.Parameters.AddWithValue("@Phone", Phone);
-
-            if (Email != "" && Email != null)
-                command.Parameters.AddWithValue("@Email", Email);
-            else
-                command.Parameters.AddWithValue("@Email", System.DBNull.Value);
-
-            command.Parameters.AddWithValue("@NationalityCountryID", NationalityCountryID);
-
-            if (ImagePath != "" && ImagePath != null)
-                command.Parameters.AddWithValue("@ImagePath", ImagePath);
-            else
-                command.Parameters.AddWithValue("@ImagePath", System.DBNull.Value);
-            try
-            {
-                connection.Open();
-
-                rowsAffected = command.ExecuteNonQuery();
-
-            }
-            catch (Exception e) { if (!EventLog.SourceExists("dvldEnd")) { EventLog.CreateEventSource("dvldEnd", "Application"); EventLog.WriteEntry("dvldEnd", e.Message, EventLogEntryType.Error); } }
-            finally { connection.Close(); }
             return (rowsAffected > 0);
         }
 
@@ -331,22 +319,22 @@ namespace DVLD_DataAccess
             using (SqlConnection connection = new SqlConnection(clsDataAccessSettings.ConnectionString))
             {
 
-            SqlCommand command = new SqlCommand("SP_GetAllPeople", connection);
+                SqlCommand command = new SqlCommand("SP_GetAllPeople", connection);
                 command.CommandType = CommandType.StoredProcedure;
-            try
-            {
-                connection.Open();
-
-                SqlDataReader reader = command.ExecuteReader();
-
-                if (reader.HasRows)
+                try
                 {
-                    dt.Load(reader);
+                    connection.Open();
+
+                    SqlDataReader reader = command.ExecuteReader();
+
+                    if (reader.HasRows)
+                    {
+                        dt.Load(reader);
+                    }
+                    reader.Close();
                 }
-                reader.Close();
-            }
-            catch (Exception e) { if (!EventLog.SourceExists("dvldEnd")) { EventLog.CreateEventSource("dvldEnd", "Application"); EventLog.WriteEntry("dvldEnd", e.Message, EventLogEntryType.Error); } }
-           
+                catch (Exception e) { if (!EventLog.SourceExists("dvldEnd")) { EventLog.CreateEventSource("dvldEnd", "Application"); EventLog.WriteEntry("dvldEnd", e.Message, EventLogEntryType.Error); } }
+
             }
             return dt;
         }
