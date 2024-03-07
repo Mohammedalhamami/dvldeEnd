@@ -110,26 +110,10 @@ namespace DVLD_DataAccess
         {
             int DetainID = -1;
 
-            SqlConnection connection = new SqlConnection(clsDataAccessSettings.ConnectionString);
+            using (SqlConnection connection = new SqlConnection(clsDataAccessSettings.ConnectionString)) { 
 
-            string query = @"INSERT INTO DetainedLicenses
-                               (LicenseID
-                               ,DetainDate
-                               ,FineFees
-                               ,CreatedByUserID
-                               ,IsReleased
-                               )
-                         VALUES(
-                              @LicenseID
-                             ,@DetainDate
-                             ,@FineFees
-                             ,@CreatedByUserID
-                             ,0
-                              )
-
-                             SELECT SCOPE_IDENTITY();";
-
-            SqlCommand command = new SqlCommand(query, connection);
+                SqlCommand command = new SqlCommand("SP_AddNewDetainLicense", connection);
+            command.CommandType = CommandType.StoredProcedure;
             command.Parameters.AddWithValue("@LicenseID", LicenseID);
             command.Parameters.AddWithValue("@DetainDate", DetainDate);
             command.Parameters.AddWithValue("@FineFees", FineFees);
@@ -154,7 +138,8 @@ namespace DVLD_DataAccess
                     EventLog.WriteEntry("dvldEnd", e.Message, EventLogEntryType.Error);
                 }
             }
-            finally { connection.Close(); }
+            
+            }
             return DetainID;
         }
         public static bool UpdateDetainLicense(int DetainID, int LicenseID, DateTime DetainDate, decimal FineFees,
