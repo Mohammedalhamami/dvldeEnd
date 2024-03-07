@@ -87,15 +87,11 @@ namespace DVLD_DataAccess
                                                    decimal PaidFees, int CreatedByUserID)
         {
             int ApplicationID = -1;
-            SqlConnection connection = new SqlConnection(clsDataAccessSettings.ConnectionString);
+            using (SqlConnection connection = new SqlConnection(clsDataAccessSettings.ConnectionString))
+            {
 
-            string query = @"INSERT INTO Applications (ApplicantPersonID, ApplicationDate, ApplicationTypeID, 
-                            ApplicationStatus, LastStatusDate, PaidFees, CreatedByUserID)
-                           VALUES(@ApplicantPersonID, @ApplicationDate, @ApplicationTypeID, @ApplicationStatus,
-                            @LastStatusDate, @PaidFees, @CreatedByUserID);
-                           SELECT SCOPE_IDENTITY(); ";
-
-            SqlCommand command = new SqlCommand(query, connection);
+            SqlCommand command = new SqlCommand("SP_AddNewApplication", connection);
+                command.CommandType = CommandType.StoredProcedure;
             command.Parameters.AddWithValue("@ApplicantPersonID", PersonID);
             command.Parameters.AddWithValue("@ApplicationDate", Date);
             command.Parameters.AddWithValue("@ApplicationTypeID", TypeID);
@@ -124,7 +120,8 @@ namespace DVLD_DataAccess
                     EventLog.WriteEntry("dvldEnd", e.Message, EventLogEntryType.Error);
                 }
             }
-            finally { connection.Close(); }
+            
+            }
             return ApplicationID;
         }
         public static bool UpdateApplication(int ID, int PersonID, DateTime Date, int TypeID

@@ -115,7 +115,7 @@ namespace DVLD
         }
         private void btnSave_Click(object sender, EventArgs e)
         {
-
+            
 
             int LicenseClassID = clsLicenseClass.Find(cbLicenseClasses.Text).LicenseClassID;
 
@@ -172,10 +172,11 @@ namespace DVLD
             ctlPersonCardWithFilter1.FilterFocus();
         }
 
-        private void ctlPersonCardWithFilter1_OnPersonSelected(object sender, clsPerson Person)
+       
+        private void ctlPersonCardWithFilter1_OnPersonSelected_2(object sender, clsPerson Person)
         {
             _SelectedPerson = Person;
-            ctlPersonCardWithFilter1.LoadPersonInfo(_SelectedPerson.PersonID);
+           // ctlPersonCardWithFilter1.LoadPersonInfo(_SelectedPerson.PersonID);
         }
     }
 }
